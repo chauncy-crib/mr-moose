@@ -14,7 +14,7 @@ import           Control.Monad
 
 
 
-jsonPath = "/Users/davidabrahams/mr-moose/common_words_by_length_dict.json"
+jsonPath = "/Users/davidabrahams/mr-moose/words_by_length_dict.json"
 
 getJSON :: String -> IO B.ByteString
 getJSON s = B.readFile s

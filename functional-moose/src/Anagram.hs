@@ -41,7 +41,7 @@ solveCurrentWord currentWords remainingChars remainingLengths dict =
 -- word length to List of Strings), a list of word lengths remaining, return the
 -- first solution to the anagram
 solve :: (MultiSet Char) -> (Int -> [String]) -> [Int] -> (Maybe [String])
-solve remainingChars _ [] = if null remainingChars then Just [] else Just [] -- if we have a solution, we expect to have no characters in the bag
+solve remainingChars _ [] = if null remainingChars then Just [] else Nothing -- if we have a solution, we expect to have no characters in the bag
 solve remainingChars dict (wordLength : rest) =
   let words = dict wordLength
   in  solveCurrentWord words remainingChars rest dict

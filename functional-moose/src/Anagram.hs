@@ -1,51 +1,55 @@
-
 module Anagram
   ( solve
+  , traceSolve
   )
 where
 
+import           Debug.Trace
 import           Data.MultiSet                  ( MultiSet )
 import qualified Data.MultiSet                 as MultiSet
+import qualified Data.Maybe                    as Maybe
 
 -- Given the characters remaining, and a list of words to try, return the first
 -- word which can be spelled, the remaining untried words, and the remaining characters
-findWord
-  :: (MultiSet Char) -> [String] -> (Maybe (String, [String], (MultiSet Char)))
+findWord :: MultiSet Char -> [String] -> Maybe (String, [String], MultiSet Char)
 findWord remainingChars [] = Nothing
 findWord remainingChars (word : rest) =
-  if (wordSet `MultiSet.isSubsetOf` remainingChars)
-    then (Just (word, rest, MultiSet.difference remainingChars wordSet))
+  if wordSet `MultiSet.isSubsetOf` remainingChars
+    then Just (word, rest, MultiSet.difference remainingChars wordSet)
     else findWord remainingChars rest
   where wordSet = MultiSet.fromList word
 
+shrinkDict :: (Int -> [String]) -> Int -> [String] -> (Int -> [String])
+shrinkDict dict thisLength unCheckedThisLength i =
+  if i == thisLength then unCheckedThisLength else dict i
 
-solveCurrentWord
-  :: [String] -- the current list of candidate words. Should all be the same length
-  -> (MultiSet Char) -- the bag of characters remaining
-  -> [Int] -- the word lengths we need to form, after this word.
-  -> (Int -> [String]) -- the dictionary
-  -> (Maybe [String]) -- the solution to the whole problem
-solveCurrentWord currentWords remainingChars remainingLengths dict =
-  let firstWord = findWord remainingChars currentWords
-  in  case firstWord of
-        Just (word, rest, rem) ->
-          let maybeSoln = solve rem dict remainingLengths
-          in  case maybeSoln of
-                Just words -> Just (word : words) -- if we have found a solution, return it
-                Nothing ->
-                  solveCurrentWord rest remainingChars remainingLengths dict -- otherwise, try a new word
-        _ -> Nothing
+
+-- Same as solve, except it prints the current accumulator before recursing
+traceSolve chars dict wordLengths acc =
+  traceShow acc (solve chars dict wordLengths acc)
 
 
 -- Given a set of characters remaining, a dictionary (represented as a function from
 -- word length to List of Strings), a list of word lengths remaining, return the
 -- first solution to the anagram
-solve :: (MultiSet Char) -> (Int -> [String]) -> [Int] -> (Maybe [String])
-solve remainingChars _ [] = if null remainingChars then Just [] else Nothing -- if we have a solution, we expect to have no characters in the bag
-solve remainingChars dict (wordLength : rest) =
-  let words = dict wordLength
-  in  solveCurrentWord words remainingChars rest dict
-
-
-
-
+solve
+  :: MultiSet Char -> (Int -> [String]) -> [Int] -> [String] -> Maybe [String]
+solve chars _ [] acc = if null chars then Just acc else Nothing -- if we have a solution, we expect to have no characters in the bag
+solve chars dict (wordLength : rest) acc =
+  let words          = dict wordLength
+      maybeFirstWord = findWord chars words -- try to spell a word
+  in  case maybeFirstWord of
+        Just (firstWord, uncheckedWords, remainingChars) ->
+          case maybeSolution of -- recursively solve the problem
+            Just finalSolution -> Just (firstWord : finalSolution) -- we found a solution!
+            Nothing -> traceSolve chars -- our choice for the first word did not lead to a solution, so try again.
+                                  (shrinkDict dict wordLength uncheckedWords) -- remove the words we have already considered from the dictionary
+                                  (wordLength : rest)
+                                  acc
+         where
+          maybeSolution = traceSolve
+            remainingChars
+            (shrinkDict dict wordLength (firstWord : uncheckedWords)) -- we are allowing the algorithm to spell the same word twice
+            rest
+            (firstWord : acc)
+        Nothing -> Nothing

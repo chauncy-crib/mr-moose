@@ -41,7 +41,7 @@ solve chars dict (wordLength : rest) acc =
   in  case maybeFirstWord of
         Just (firstWord, uncheckedWords, remainingChars) ->
           case maybeSolution of -- recursively solve the problem
-            Just finalSolution -> Just (firstWord : finalSolution) -- we found a solution!
+            Just finalSolution -> Just finalSolution -- we found a solution!
             Nothing -> traceSolve chars -- our choice for the first word did not lead to a solution, so try again.
                                   (shrinkDict dict wordLength uncheckedWords) -- remove the words we have already considered from the dictionary
                                   (wordLength : rest)

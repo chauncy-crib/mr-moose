@@ -48,7 +48,6 @@ class Word():
 class WordTreeRoot():
     def __init__(self):
         self.word = Word(None)
-        self.children = []
         self.parent = None
         self.depth = 0
 
@@ -59,7 +58,6 @@ class WordTreeRoot():
 class WordNode():
     def __init__(self, word, parent):
         self.word = word
-        self.children = []
         self.parent = parent
         self.depth = parent.depth + 1
 
@@ -203,13 +201,10 @@ def build_word_tree(solutions, parent_word_node, words_by_length_dict, chars, wo
             remaining_chars = get_chars_without_word_letters(word, chars)
             remaining_word_lengths = get_word_lengths_without_length(longest_word_length,
                     word_lengths)
-            parent_word_node.children.append(build_word_tree(solutions,
-                    WordNode(word, parent_word_node), words_by_length_dict, remaining_chars,
-                    remaining_word_lengths))
+            build_word_tree(solutions, WordNode(word, parent_word_node), words_by_length_dict,
+                    remaining_chars, remaining_word_lengths)
 
-
-
-
+            
 def main():
     solutions = []
     open(SOLUTIONS_FNAME, 'w').write('')

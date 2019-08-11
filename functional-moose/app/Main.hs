@@ -49,11 +49,6 @@ moosePuzzle = "mfctosesannhddcoieisanartheowgvtesebhr"
 --   (print (solve (MultiSet.fromList buttspoopcatdog) dict [5, 4, 3, 3] [])) *>
 --   (print (solve (MultiSet.fromList shanepoopcatdog) dict [5, 4, 3, 3] [])) *>
 --   (print (solve (MultiSet.fromList dog) dict [3] []))
--- main =
-  -- putStrLn $ show (solve (MultiSet.fromList nosolution1) dict [5, 4, 3, 3])
--- main = putStrLn $ show (solve (MultiSet.fromList "a") dict [1])
--- main = putStrLn $ show (solve (MultiSet.fromList "a") dict [1])
---
 --
 main :: IO ()
 main = do
@@ -69,5 +64,5 @@ main = do
                            jsonDict
                            [10, 7, 6, 6, 5, 4]
                            []
-                      -- in  putStrLn ("ALL SOLUTIONS: " ++ (show solution))
+                              -- in  putStrLn ("ALL SOLUTIONS: " ++ (show solution))
       in  putStrLn ("Hello! I'm done. I found " ++ show (List.length solution))

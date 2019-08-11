@@ -42,8 +42,10 @@ solve chars dict (wordLength : rest) acc =
                 acc
               solutionsUsingFirstWord = solve
                 remainingChars
+                -- We can use the firstWord again
                 (shrinkDict dict wordLength (firstWord : uncheckedWords))
                 rest
                 (firstWord : acc)
+                  -- the solutions must either contain the first word, or not contain the first word
           in  solutionsUsingFirstWord ++ solutionsNotUsingFirstWord
-        Nothing -> []
+        Nothing -> [] -- if we cannot spell a first word, there are no solutions

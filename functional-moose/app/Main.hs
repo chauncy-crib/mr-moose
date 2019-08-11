@@ -7,6 +7,7 @@ import           Data.Text
 
 import           Data.Map                       ( Map )
 import qualified Data.Map                      as Map
+import qualified Data.List                     as List
 import qualified Data.Maybe
 import qualified Data.MultiSet                 as MultiSet
 import qualified Data.ByteString.Lazy          as B
@@ -15,7 +16,7 @@ import           Control.Monad
 
 
 
-jsonPath = "/home/david/mr-moose/words_by_length_dict.json"
+jsonPath = "/home/david/mr-moose/common_spellable_words_by_length_dict.json"
 
 -- represent our dictionary as a function from word length to a list of words of that length
 dict :: Int -> [String]
@@ -64,8 +65,9 @@ main = do
     Left err -> putStrLn err
     Right (m :: Map Int [String]) ->
       let jsonDict = dictFromMap m
-          solution = traceSolve (MultiSet.fromList moosePuzzle)
-                                jsonDict
-                                [10, 7, 6, 6, 5, 4]
-                                []
-      in  print solution
+          solution = solve (MultiSet.fromList moosePuzzle)
+                           jsonDict
+                           [10, 7, 6, 6, 5, 4]
+                           []
+                      -- in  putStrLn ("ALL SOLUTIONS: " ++ (show solution))
+      in  putStrLn ("Hello! I'm done. I found " ++ show (List.length solution))

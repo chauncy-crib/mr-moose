@@ -23,14 +23,14 @@ CHARS = Counter('mfctosesannhddcoieisanartheowgvtesebhr')
 
 # The filename of the word-list. Contains lots of English words, hopefully includes all of the words
 # needed to create the solution sentence.
-WORDS_LIST_FNAME = 'common_words_list.txt'
+WORDS_LIST_FNAME = 'mr_moose_favorite_words_list.txt'
 # The filename of the words-by-length-dict. Contains a map from length of word to a list of words of
 # that length. Constructed from the word-list.
-WORDS_BY_LENGTH_DICT_FNAME = 'common_words_by_length_dict.json'
+WORDS_BY_LENGTH_DICT_FNAME = 'mr_moose_favorite_words_by_length_dict.json'
 # The filename of the spellable-words-by-length-dict. Contains a map from length of word to a list
 # of words of that length that can be spelled from the characters in `CHARS` and are not of a length
 # that does not exist in `WORD_LENGTHS`. Constructed from the words-by-length-dict.
-SPELLABLE_WORDS_BY_LENGTH_DICT_FNAME = 'common_spellable_words_by_length_dict.json'
+SPELLABLE_WORDS_BY_LENGTH_DICT_FNAME = 'mr_moose_favorite_spellable_words_by_length_dict.json'
 
 SOLUTIONS_FNAME = 'solutions.txt'
 
@@ -210,7 +210,7 @@ def main():
     open(SOLUTIONS_FNAME, 'w').write('')
     word_tree_root = WordTreeRoot()
     words_by_length_dict = get_spellable_words_by_length_dict()
-    words_by_length_dict = keep_top_percentage_of_frequent_words(words_by_length_dict, .03)
+    # words_by_length_dict = keep_top_percentage_of_frequent_words(words_by_length_dict, .03)
     words_by_length_dict = add_counters_to_words_by_length_dict(words_by_length_dict)
     build_word_tree(solutions, word_tree_root, words_by_length_dict, CHARS, WORD_LENGTHS)
 
